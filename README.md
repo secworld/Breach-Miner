@@ -5,7 +5,7 @@ Just a handy tool for pentesters to recon their victims in scope. Using this too
 
 Requirements:
 ==============
-Python 2.7
+Python 2.7, 
 WGET
 
 Tested On:
