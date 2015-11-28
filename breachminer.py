@@ -3,31 +3,26 @@
 import requests
 import urllib
 import os.path
-import re
-import colorama
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = ''
-    RED = '\033[31m'
+os.system('clear')   
+print '\033[31m'             
+print """\
+$$$$$$$\                                          $$\       $$\      $$\ $$\                               
+$$  __$$\                                         $$ |      $$$\    $$$ |\__|                              
+$$ |  $$ | $$$$$$\   $$$$$$\   $$$$$$\   $$$$$$$\ $$$$$$$\  $$$$\  $$$$ |$$\ $$$$$$$\   $$$$$$\   $$$$$$\  
+$$$$$$$\ |$$  __$$\ $$  __$$\  \____$$\ $$  _____|$$  __$$\ $$\$$\$$ $$ |$$ |$$  __$$\ $$  __$$\ $$  __$$\ 
+$$  __$$\ $$ |  \__|$$$$$$$$ | $$$$$$$ |$$ /      $$ |  $$ |$$ \$$$  $$ |$$ |$$ |  $$ |$$$$$$$$ |$$ |  \__|
+$$ |  $$ |$$ |      $$   ____|$$  __$$ |$$ |      $$ |  $$ |$$ |\$  /$$ |$$ |$$ |  $$ |$$   ____|$$ |      
+$$$$$$$  |$$ |      \$$$$$$$\ \$$$$$$$ |\$$$$$$$\ $$ |  $$ |$$ | \_/ $$ |$$ |$$ |  $$ |\$$$$$$$\ $$ |      
+\_______/ \__|       \_______| \_______| \_______|\__|  \__|\__|     \__|\__|\__|  \__| \_______|\__|      
+                                                                                                           
+                                                                                Author   : @dH4wk
+                                                                                Courtsey : @troyhunt
+"""
 
-def CredMiner(f,strn):
-    with open(f) as f:
-        for line in f:
-            match = re.findall(strn, line)
-            if match == None:
-                print line
-                
-            
 
 headers = {'User-Agent' : 'Digging-for-Pentesting', 'Accept' : 'application/vnd.haveibeenpwned.v2+json'}
 BaseUrl = 'https://haveibeenpwned.com/api/v2/pasteaccount/'
-os.system('clear')
 EmailList = raw_input("\033[92m Enter the path of the file containing Email Accounts : ")
 choice = raw_input("\033[92m Do you want to go for a detailed analysis \033[93m[Y/N] : ")
 
