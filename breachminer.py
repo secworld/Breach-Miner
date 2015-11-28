@@ -86,4 +86,4 @@ with open(EmailList) as f:
                             
 
 print "\n   \033[92m +++++++ \033[31m Happy Hunting \033[92m +++++++++"
-
+print '\n'
