@@ -3,10 +3,13 @@ A quick and dirty upython based tool to harvest credentials from a leaked data d
 
 Just a handy tool for pentesters to recon their victims in scope. Using this tool one can identify the victims email account has been leaked during any breaches. The tool uses Troy Hunts haveibeenpwned api to search for accounts in breach dumps. 
 
-Requirements:
+Usage:
 ==============
-Python 2.7, 
-WGET
+git clone https://github.com/secworld/Breach-Miner.git && cd Breach-Miner
+chmod +x breachminer.py requirements.sh
+./requirements.sh
+python breachminer.py
+
 
 Tested On:
 ===========
