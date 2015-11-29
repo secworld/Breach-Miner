@@ -41,9 +41,10 @@ def exit_gracefully():
 
 def invokeBM(EmailList):
     print EmailList
+    os.system('clear')
     print ("\033[94m *************************************************************************************")
     choice = raw_input("\033[92m Do you want to go for a detailed analysis \033[93m[Y/N] : ")
-    os.system('clear')
+    
     print ("\n  [*] "+"\033[92m"+"I am mining ... Sit back and relax !!!")
     with open(EmailList) as f:
         for email in f:
