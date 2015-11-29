@@ -42,7 +42,8 @@ def exit_gracefully():
 def invokeBM(EmailList):
     print EmailList
     os.system('clear')
-    print ("\033[94m *************************************************************************************")
+    print banner
+    print ("|n")
     choice = raw_input("\033[92m Do you want to go for a detailed analysis \033[93m[Y/N] : ")
     
     print ("\n  [*] "+"\033[92m"+"I am mining ... Sit back and relax !!!")
@@ -51,6 +52,7 @@ def invokeBM(EmailList):
             Url1 = urllib.quote(email, safe='')
             Url = BaseUrl+Url1
             Url = Url[:-3]
+            headers = None
             r = requests.get(Url, headers = headers)
             try:
                 JsonData =  (r.json())
@@ -80,6 +82,7 @@ def invokeBM(EmailList):
                     if choice.lower() == 'y':
                         if source == 'Pastebin':
                             puid = did
+                            headers = None
                             purl = 'http://pastebin.com/raw.php?i='+puid
                             r1 = requests.get(purl, headers = headers)
                             if r1.status_code != 302:
@@ -100,6 +103,57 @@ def invokeBM(EmailList):
                                     
                                 else:
                                     print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
+                                    
+                        
+                        if source == 'Pastie':
+                            puid = did
+                            headers = None
+                            purl = 'http://pastie.org/pastes/' + puid + '/text'
+                            r1 = requests.get(purl, headers = headers)
+                            if r1.status_code != 302:
+                                if r1.status_code != 404:
+                                    print '\n'
+                                    print "\033[94m"+"=============================================================================================================="
+                                    print "\033[98m [*]   Got It !!! Dump found at "+purl+' for email account \033[93m'+email
+                                    print "\033[94m"+"=============================================================================================================="
+                                    CurrPath =  os.getcwd()+'/tmp.txt'
+                                    grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
+                                    os.system(grab)
+                                    #CredMiner(CurrPath, email)
+                                    print '\033[92m'
+                                    os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
+                                    if os.path.exists(CurrPath):
+                                        #os.system('mv '+CurrPath+' tmp.txt.bkp')
+                                        os.system('rm '+CurrPath)
+                                    
+                                else:
+                                    print "\n \033[31m [*] Sorry !!! The pastie dumb seems to be missing at "+source+"/"+did+"  :( "
+                                    
+                        if source == 'Slexy':
+                            puid = did
+                            headers = {'Referer': 'http://slexy.org/view/' + puid}
+                            purl = 'http://slexy.org/raw/' + puid
+                            r1 = requests.get(purl, headers = headers)
+                            if r1.status_code != 302:
+                                if r1.status_code != 404:
+                                    print '\n'
+                                    print "\033[94m"+"=============================================================================================================="
+                                    print "\033[98m [*]   Got It !!! Dump found at "+purl+' for email account \033[93m'+email
+                                    print "\033[94m"+"=============================================================================================================="
+                                    CurrPath =  os.getcwd()+'/tmp.txt'
+                                    grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
+                                    os.system(grab)
+                                    #CredMiner(CurrPath, email)
+                                    print '\033[92m'
+                                    os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
+                                    if os.path.exists(CurrPath):
+                                        #os.system('mv '+CurrPath+' tmp.txt.bkp')
+                                        os.system('rm '+CurrPath)
+                                    
+                                else:
+                                    print "\n \033[31m [*] Sorry !!! The Slexy dumb seems to be missing at "+source+"/"+did+"  :( "
+                            
+                            
     f.close()
                             
 if __name__ == "__main__":
