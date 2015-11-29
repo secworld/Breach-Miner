@@ -14,8 +14,9 @@ Kali 2.0
 
 To Do:
 =======
-A lot :)
-[*] To provide email grabbing capbility
+A lot to do :)
 [*] Currently supports only dumps from pastebin. To support other dumps too
 [*] More efficient and fast searching of credentials in the dump
 [*] Juicy information retrival from other sources respective to the account (other than using the API)
+[*] If passwords found then create a wordlist/dictionary
+
