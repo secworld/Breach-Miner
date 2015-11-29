@@ -4,6 +4,7 @@ import requests
 import urllib
 import os.path
 import xml.etree.ElementTree as ET
+from cache_search import cache_search
 
    
 print "\033[31m \n"            
@@ -45,7 +46,8 @@ def invokeBM(EmailList):
     print banner
     print ("|n")
     choice = raw_input("\033[92m Do you want to go for a detailed analysis \033[93m[Y/N] : ")
-    
+    flag = 'false'
+    count = 1
     print ("\n  [*] "+"\033[92m"+"I am mining ... Sit back and relax !!!")
     with open(EmailList) as f:
         for email in f:
@@ -84,6 +86,7 @@ def invokeBM(EmailList):
                             puid = did
                             headers = None
                             purl = 'http://pastebin.com/raw.php?i='+puid
+                            purl1 = 'http://pastebin.com/'+puid
                             r1 = requests.get(purl, headers = headers)
                             if r1.status_code != 302:
                                 if r1.status_code != 404:
@@ -103,12 +106,20 @@ def invokeBM(EmailList):
                                     
                                 else:
                                     print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
-                                    
+                                    if (count == '1') or (flag != 'true'):
+                                        s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
+                                        count = 0
+                                    if s.lower() == 'a':
+                                        flag = 'true'
+                                    if (s.lower() == 'y') or (flag == 'true'):
+                                        cache_search(purl1, email) 
+                                                                          
                         
                         if source == 'Pastie':
                             puid = did
                             headers = None
                             purl = 'http://pastie.org/pastes/' + puid + '/text'
+                            purl1 = 'http://pastie.org/pastes/'+puid
                             r1 = requests.get(purl, headers = headers)
                             if r1.status_code != 302:
                                 if r1.status_code != 404:
@@ -125,14 +136,23 @@ def invokeBM(EmailList):
                                     if os.path.exists(CurrPath):
                                         #os.system('mv '+CurrPath+' tmp.txt.bkp')
                                         os.system('rm '+CurrPath)
-                                    
+                                        
                                 else:
-                                    print "\n \033[31m [*] Sorry !!! The pastie dumb seems to be missing at "+source+"/"+did+"  :( "
+                                    print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
+                                    if (count == '1') or (flag != 'true'):
+                                        s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
+                                        count = 0
+                                    if s.lower() == 'a':
+                                        flag = 'true'
+                                    if (s.lower() == 'y') or (flag == 'true'):
+                                        cache_search(purl1, email) 
+                                    
                                     
                         if source == 'Slexy':
                             puid = did
                             headers = {'Referer': 'http://slexy.org/view/' + puid}
                             purl = 'http://slexy.org/raw/' + puid
+                            purl1 = 'http://slexy.org/view/'+puid
                             r1 = requests.get(purl, headers = headers)
                             if r1.status_code != 302:
                                 if r1.status_code != 404:
@@ -151,8 +171,14 @@ def invokeBM(EmailList):
                                         os.system('rm '+CurrPath)
                                     
                                 else:
-                                    print "\n \033[31m [*] Sorry !!! The Slexy dumb seems to be missing at "+source+"/"+did+"  :( "
-                            
+                                    print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
+                                    if (count == '1') or (flag != 'true'):
+                                        s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
+                                        count = 0
+                                    if s.lower() == 'a':
+                                        flag = 'true'
+                                    if (s.lower() == 'y') or (flag == 'true'):
+                                        cache_search(purl1, email) 
                             
     f.close()
                             
