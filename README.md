@@ -5,9 +5,12 @@ Just a handy tool for pentesters to recon their victims in scope. Using this too
 
 Usage:
 ==============
-git clone https://github.com/secworld/Breach-Miner.git && cd Breach-Miner
+git clone https://github.com/secworld/Breach-Miner.git && cd Breach-Miner 
+
 chmod +x breachminer.py requirements.sh
+
 ./requirements.sh
+
 python breachminer.py
 
 
@@ -17,9 +20,14 @@ Kali 2.0
 
 To Do:
 =======
+
 A lot to do :)
+
 [*] Currently supports only dumps from pastebin. To support other dumps too
+
 [*] More efficient and fast searching of credentials in the dump
+
 [*] Juicy information retrival from other sources respective to the account (other than using the API)
+
 [*] If passwords found then create a wordlist/dictionary
 
