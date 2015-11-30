@@ -1,4 +1,3 @@
-#! /usr/bin/python
 
 import os
 import requests
@@ -22,8 +21,5 @@ def cache_search(purl, email):
             os.system('invoke_phantom.sh get_cache.js "'+url+'" local_cache.txt')
         else:
             print '\n \033[31m Could not find data dump in archives \n'
-if __name__ == "__main__":
-    purl = 'pastebin.com/WEPM7WbF'
-    email = 'java.lang.reflect'
-    cache_search(purl, email)
+
     
