@@ -23,8 +23,6 @@ To Do:
 
 A lot to do :)
 
-[*] Currently supports only dumps from pastebin. To support other dumps too
-
 [*] More efficient and fast searching of credentials in the dump
 
 [*] Juicy information retrival from other sources respective to the account (other than using the API)
