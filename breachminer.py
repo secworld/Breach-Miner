@@ -1,11 +1,15 @@
 #! /usr/bin/python
 
+
 import requests
 import urllib
 import os.path
 import xml.etree.ElementTree as ET
 from cache_search import cache_search
-
+from create_html import create_html
+from create_html import invokeBrowser
+import subprocess
+import time
    
 print "\033[31m \n"            
 banner = """\n \
@@ -37,150 +41,175 @@ def invokeHarvester(domain):
             f.write(elem.text+'\n')
     f.close()
 
-def exit_gracefully():
-    print 
+
 
 def invokeBM(EmailList):
-    print EmailList
     os.system('clear')
     print banner
     print ("|n")
-    choice = raw_input("\033[92m Do you want to go for a detailed analysis \033[93m[Y/N] : ")
+    choice = raw_input("\033[92m [*] Do you want to go for a detailed analysis \033[93m[Y/N] : ")
     flag = 'false'
     count = 1
+    banner_html = create_html()
+    html_file = 'Files/Results.html'
     print ("\n  [*] "+"\033[92m"+"I am mining ... Sit back and relax !!!")
-    with open(EmailList) as f:
-        for email in f:
-            Url1 = urllib.quote(email, safe='')
-            Url = BaseUrl+Url1
-            Url = Url[:-3]
-            headers = None
-            r = requests.get(Url, headers = headers)
-            try:
-                JsonData =  (r.json())
-            except ValueError:
-                print "\n \033[31m [*] No data found for " + email
-                
-            if (r.status_code == 200):
-                print ('\n')
-                print ("\033[94m *************************************************************************************")
-                print '  \033[93m  [*] Located email account in leaked data dumps for : \033[93m'+email
-                print ("\033[94m *************************************************************************************")
-                print ('\n')
-                for item in JsonData:
-                    source = item.get('Source')
-                    did = item.get('Id')
-                    title = item.get('Title')
-                    if title is None:
-                        title = "None"
+    try:
+        with open(html_file, 'w') as res:
+            res.write(banner_html)
+            with open(EmailList) as f:
+                for email in f:
+                    Url1 = urllib.quote(email, safe='')
+                    Url = BaseUrl+Url1
+                    Url = Url[:-3]
+                    headers = None
+                    r = requests.get(Url, headers = headers)
+                    try:
+                        JsonData =  (r.json())
+                    except ValueError:
+                        print "\n \033[31m [*] No data found for " + email
                         
-                    if choice.lower() == 'n':
+                    if (r.status_code == 200):
                         print ('\n')
-                        print "\033[92m Title of the dump : "+title
-                        print "\033[92m Source of the dump : "+source
-                        print "\033[92m Breach data can be found at : "+source+"/"+did
+                        print ("\033[94m *************************************************************************************")
+                        print '  \033[93m  [*] Located email account in leaked data dumps for : \033[93m'+email
+                        print ("\033[94m *************************************************************************************")
                         print ('\n')
-                        
-                    if choice.lower() == 'y':
-                        if source == 'Pastebin':
-                            puid = did
-                            headers = None
-                            purl = 'http://pastebin.com/raw.php?i='+puid
-                            purl1 = 'http://pastebin.com/'+puid
-                            r1 = requests.get(purl, headers = headers)
-                            if r1.status_code != 302:
-                                if r1.status_code != 404:
-                                    print '\n'
-                                    print "\033[94m"+"=============================================================================================================="
-                                    print "\033[98m [*]   Got It !!! Dump found at "+purl+' for email account \033[93m'+email
-                                    print "\033[94m"+"=============================================================================================================="
-                                    CurrPath =  os.getcwd()+'/tmp.txt'
-                                    grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
-                                    os.system(grab)
-                                    #CredMiner(CurrPath, email)
-                                    print '\033[92m'
-                                    os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
-                                    if os.path.exists(CurrPath):
-                                        #os.system('mv '+CurrPath+' tmp.txt.bkp')
-                                        os.system('rm '+CurrPath)
-                                    
-                                else:
-                                    print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
-                                    if (count == '1') or (flag != 'true'):
-                                        s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
-                                        count = 0
-                                    if s.lower() == 'a':
-                                        flag = 'true'
-                                    if (s.lower() == 'y') or (flag == 'true'):
-                                        cache_search(purl1, email) 
-                                                                          
-                        
-                        if source == 'Pastie':
-                            puid = did
-                            headers = None
-                            purl = 'http://pastie.org/pastes/' + puid + '/text'
-                            purl1 = 'http://pastie.org/pastes/'+puid
-                            r1 = requests.get(purl, headers = headers)
-                            if r1.status_code != 302:
-                                if r1.status_code != 404:
-                                    print '\n'
-                                    print "\033[94m"+"=============================================================================================================="
-                                    print "\033[98m [*]   Got It !!! Dump found at "+purl+' for email account \033[93m'+email
-                                    print "\033[94m"+"=============================================================================================================="
-                                    CurrPath =  os.getcwd()+'/tmp.txt'
-                                    grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
-                                    os.system(grab)
-                                    #CredMiner(CurrPath, email)
-                                    print '\033[92m'
-                                    os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
-                                    if os.path.exists(CurrPath):
-                                        #os.system('mv '+CurrPath+' tmp.txt.bkp')
-                                        os.system('rm '+CurrPath)
-                                        
-                                else:
-                                    print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
-                                    if (count == '1') or (flag != 'true'):
-                                        s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
-                                        count = 0
-                                    if s.lower() == 'a':
-                                        flag = 'true'
-                                    if (s.lower() == 'y') or (flag == 'true'):
-                                        cache_search(purl1, email) 
-                                    
-                                    
-                        if source == 'Slexy':
-                            puid = did
-                            headers = {'Referer': 'http://slexy.org/view/' + puid}
-                            purl = 'http://slexy.org/raw/' + puid
-                            purl1 = 'http://slexy.org/view/'+puid
-                            r1 = requests.get(purl, headers = headers)
-                            if r1.status_code != 302:
-                                if r1.status_code != 404:
-                                    print '\n'
-                                    print "\033[94m"+"=============================================================================================================="
-                                    print "\033[98m [*]   Got It !!! Dump found at "+purl+' for email account \033[93m'+email
-                                    print "\033[94m"+"=============================================================================================================="
-                                    CurrPath =  os.getcwd()+'/tmp.txt'
-                                    grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
-                                    os.system(grab)
-                                    #CredMiner(CurrPath, email)
-                                    print '\033[92m'
-                                    os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
-                                    if os.path.exists(CurrPath):
-                                        #os.system('mv '+CurrPath+' tmp.txt.bkp')
-                                        os.system('rm '+CurrPath)
-                                    
-                                else:
-                                    print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
-                                    if (count == '1') or (flag != 'true'):
-                                        s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
-                                        count = 0
-                                    if s.lower() == 'a':
-                                        flag = 'true'
-                                    if (s.lower() == 'y') or (flag == 'true'):
-                                        cache_search(purl1, email) 
-                            
-    f.close()
+                        for item in JsonData:
+                            source = item.get('Source')
+                            did = item.get('Id')
+                            title = item.get('Title')
+                            if title is None:
+                                title = "None"
+                                
+                            if choice.lower() == 'n':
+                                print ('\n')
+                                print "\033[92m Title of the dump : "+title
+                                print "\033[92m Source of the dump : "+source
+                                print "\033[92m Breach data can be found at : "+source+"/"+did
+                                print ('\n')
+                                
+                            if choice.lower() == 'y':
+                                if source == 'Pastebin':
+                                    puid = did
+                                    headers = None
+                                    purl = 'http://pastebin.com/raw.php?i='+puid
+                                    purl1 = 'http://pastebin.com/'+puid
+                                    r1 = requests.get(purl, headers = headers)
+                                    if r1.status_code != 302:
+                                        if r1.status_code != 404:
+                                            print '\n'
+                                            print "\033[94m"+"=============================================================================================================="
+                                            print "\033[98m [*]   Got It !!! Dump found at 033[31m "+purl+' for email account \033[93m'+email
+                                            print "\033[94m"+"=============================================================================================================="
+                                            CurrPath =  os.getcwd()+'/tmp.txt'
+                                            grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
+                                            os.system(grab)
+                                            #CredMiner(CurrPath, email)
+                                            print '\033[92m'
+                                            os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
+                                            p = subprocess.Popen('cat '+CurrPath+' | grep -B 1 -A 1 '+email, stdout=subprocess.PIPE, shell=True)
+                                            (output, err) = p.communicate()
+                                            #print output
+                                            res.write('<div style="color: #1aff1a;"">')
+                                            res.write('<h4>Data for email account : %s </h4>'%email)
+                                            print '\033[31m'
+                                            res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output))
+                                            res.write('</div><br>')
+                                            if os.path.exists(CurrPath):
+                                                #os.system('mv '+CurrPath+' tmp.txt.bkp')
+                                                os.system('rm '+CurrPath)
+                                            
+                                        else:
+                                            print "\n \033[31m [*] Sorry !!! The pastebin dumb seems to be missing at "+source+"/"+did+"  :( "
+                                            if (count == '1') or (flag != 'true'):
+                                                s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
+                                                count = 0
+                                            if s.lower() == 'a':
+                                                flag = 'true'
+                                            if (s.lower() == 'y') or (flag == 'true'):
+                                                cache_search(purl1, email) 
+                                                                                  
+                                
+                                if source == 'Pastie':
+                                    puid = did
+                                    headers = None
+                                    purl = 'http://pastie.org/pastes/' + puid + '/text'
+                                    purl1 = 'http://pastie.org/pastes/'+puid
+                                    r1 = requests.get(purl, headers = headers)
+                                    if r1.status_code != 302:
+                                        if r1.status_code != 404:
+                                            print '\n'
+                                            print "\033[94m"+"=============================================================================================================="
+                                            print "\033[98m [*]   Got It !!! Dump found at 033[31m "+purl+' for email account \033[93m'+email
+                                            print "\033[94m"+"=============================================================================================================="
+                                            CurrPath =  os.getcwd()+'/tmp.txt'
+                                            grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
+                                            os.system(grab)
+                                            #CredMiner(CurrPath, email)
+                                            print '\033[92m'
+                                            os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
+                                            p = subprocess.Popen('cat '+CurrPath+' | grep -B 1 -A 1 '+email, stdout=subprocess.PIPE, shell=True)
+                                            (output, err) = p.communicate()
+                                            res.write('<div style="color: #1aff1a;"">')
+                                            res.write('<h4>Data for email account : %s</h4>'%email)
+                                            res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output))
+                                            res.write('</div><br>')
+                                            if os.path.exists(CurrPath):
+                                                #os.system('mv '+CurrPath+' tmp.txt.bkp')
+                                                os.system('rm '+CurrPath)
+                                                
+                                        else:
+                                            print "\n \033[31m [*] Sorry !!! The pastie dumb seems to be missing at "+source+"/"+did+"  :( "
+                                            if (count == '1') or (flag != 'true'):
+                                                s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
+                                                count = 0
+                                            if s.lower() == 'a':
+                                                flag = 'true'
+                                            if (s.lower() == 'y') or (flag == 'true'):
+                                                cache_search(purl1, email) 
+                                            
+                                            
+                                if source == 'Slexy':
+                                    puid = did
+                                    headers = {'Referer': 'http://slexy.org/view/' + puid}
+                                    purl = 'http://slexy.org/raw/' + puid
+                                    purl1 = 'http://slexy.org/view/'+puid
+                                    r1 = requests.get(purl, headers = headers)
+                                    if r1.status_code != 302:
+                                        if r1.status_code != 404:
+                                            print '\n'
+                                            print "\033[94m"+"=============================================================================================================="
+                                            print "\033[98m [*]   Got It !!! Dump found at 033[31m"+purl+' for email account \033[93m'+email
+                                            print "\033[94m"+"=============================================================================================================="
+                                            CurrPath =  os.getcwd()+'/tmp.txt'
+                                            grab = str('wget '+purl+' -O  '+CurrPath+' > /dev/null 2>&1')
+                                            os.system(grab)
+                                            #CredMiner(CurrPath, email)
+                                            print '\033[92m'
+                                            os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
+                                            p = subprocess.Popen('cat '+CurrPath+' | grep -B 1 -A 1 '+email, stdout=subprocess.PIPE, shell=True)
+                                            (output, err) = p.communicate()
+                                            res.write('<div style="color: #1aff1a;"">')
+                                            res.write('<h4>Data for email account : %s</h4>'%email)
+                                            res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output))
+                                            res.write('</div><br>')
+                                            if os.path.exists(CurrPath):
+                                                #os.system('mv '+CurrPath+' tmp.txt.bkp')
+                                                os.system('rm '+CurrPath)
+                                            
+                                        else:
+                                            print "\n \033[31m [*] Sorry !!! The slexy dumb seems to be missing at "+source+"/"+did+"  :( "
+                                            if (count == '1') or (flag != 'true'):
+                                                s = raw_input('\033[92m Do you want to search archives for the missing data A(All)/Y(Only This)/N(No) : ')
+                                                count = 0
+                                            if s.lower() == 'a':
+                                                flag = 'true'
+                                            if (s.lower() == 'y') or (flag == 'true'):
+                                                cache_search(purl1, email) 
+            f.close()
+        res.close()
+    except:
+        print 'Something went wrong.. May be I donot have that much skills :('
                             
 if __name__ == "__main__":
     os.system('clear')
@@ -201,6 +230,16 @@ if __name__ == "__main__":
         else:
             print "Sorry I am not so intelligent ... Exiting !!!"  
             exit(1)
+        time.sleep(1)
+        rpath = os.getcwd()+'/Files/Results.html'
+        br = raw_input('\n [*] Do you want me to open the details in the browser Y/N : ')
+        if br.lower() == 'y':
+            invokeBrowser()
+        else:
+            os.system('clear')
+            print '\n\n [*] The Analysis Report can be found on '+rpath
+        
+                
     
     except KeyboardInterrupt:
         print '\n \n  Exiting ... Bye!!! \n'
