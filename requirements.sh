@@ -1,5 +1,6 @@
 #! /bin/bash
 
+mkdir -p Files
 declare -A req=([1]=wget [2]=theharvester [3]=python2.7 [4]=npm)
 
 for i in "${req[@]}"
