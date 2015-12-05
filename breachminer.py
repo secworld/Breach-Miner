@@ -109,11 +109,15 @@ def invokeBM(EmailList):
                                             os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
                                             p = subprocess.Popen('cat '+CurrPath+' | grep -B 1 -A 1 '+email, stdout=subprocess.PIPE, shell=True)
                                             (output, err) = p.communicate()
+                                            p1 = subprocess.Popen('cat '+CurrPath+' | grep '+email, stdout=subprocess.PIPE, shell=True)
+                                            (output1, err1) = p1.communicate()
                                             #print output
                                             res.write('<div style="color: #1aff1a;"">')
                                             res.write('<h4>Data for email account : %s </h4>'%email)
                                             print '\033[31m'
                                             res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output))
+                                            res.write('<p> [*] More Accurate Details : ')
+                                            res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output1))
                                             res.write('</div><br>')
                                             if os.path.exists(CurrPath):
                                                 #os.system('mv '+CurrPath+' tmp.txt.bkp')
@@ -150,9 +154,15 @@ def invokeBM(EmailList):
                                             os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
                                             p = subprocess.Popen('cat '+CurrPath+' | grep -B 1 -A 1 '+email, stdout=subprocess.PIPE, shell=True)
                                             (output, err) = p.communicate()
+                                            p1 = subprocess.Popen('cat '+CurrPath+' | grep '+email, stdout=subprocess.PIPE, shell=True)
+                                            (output1, err1) = p1.communicate()
+                                            #print output
                                             res.write('<div style="color: #1aff1a;"">')
-                                            res.write('<h4>Data for email account : %s</h4>'%email)
+                                            res.write('<h4>Data for email account : %s </h4>'%email)
+                                            print '\033[31m'
                                             res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output))
+                                            res.write('<p> [*] More Accurate Details : ')
+                                            res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output1))
                                             res.write('</div><br>')
                                             if os.path.exists(CurrPath):
                                                 #os.system('mv '+CurrPath+' tmp.txt.bkp')
@@ -189,9 +199,15 @@ def invokeBM(EmailList):
                                             os.system('cat '+CurrPath+' | grep -B 1 -A 1 '+email)
                                             p = subprocess.Popen('cat '+CurrPath+' | grep -B 1 -A 1 '+email, stdout=subprocess.PIPE, shell=True)
                                             (output, err) = p.communicate()
+                                            p1 = subprocess.Popen('cat '+CurrPath+' | grep '+email, stdout=subprocess.PIPE, shell=True)
+                                            (output1, err1) = p1.communicate()
+                                            #print output
                                             res.write('<div style="color: #1aff1a;"">')
-                                            res.write('<h4>Data for email account : %s</h4>'%email)
+                                            res.write('<h4>Data for email account : %s </h4>'%email)
+                                            print '\033[31m'
                                             res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output))
+                                            res.write('<p> [*] More Accurate Details : ')
+                                            res.write('<p> [*] The dump may be found at %s.\033[92m <br> [*] Details : <br> %s </p>'%(purl1, output1))
                                             res.write('</div><br>')
                                             if os.path.exists(CurrPath):
                                                 #os.system('mv '+CurrPath+' tmp.txt.bkp')
@@ -217,7 +233,7 @@ if __name__ == "__main__":
     try:
         print '[1] Run TheHarvester '
         print '[2] Input email file '
-        st = raw_input('Please select an option [1/2] : ')
+        st = raw_input('\n[*] Please select an option [1/2] : ')
         if st == "1":
             domain = raw_input('Enter the domain to seed the harvester : ')
             invokeHarvester(domain)
@@ -249,4 +265,3 @@ if __name__ == "__main__":
 
 print "\n   \033[92m +++++++  Happy Hunting  +++++++++"
 print '\n'
-
