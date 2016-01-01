@@ -1,16 +1,18 @@
 #! /usr/bin/python
 
 
-import requests
-import urllib
 import os.path
-import xml.etree.ElementTree as ET
+import requests
+import subprocess
+import time
+import urllib
+
 from cache_search import cache_search
 from create_html import create_html
 from create_html import invokeBrowser
-import subprocess
-import time
-   
+import xml.etree.ElementTree as ET
+
+
 print "\033[31m \n"            
 banner = """\n \
 $$$$$$$\                                          $$\       $$\      $$\ $$\                               
