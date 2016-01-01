@@ -8,5 +8,3 @@ page.open(url, function(status) {
 		fs.write(dir, page.plainText, 'w')
 		phantom.exit();
 		});
-
-
