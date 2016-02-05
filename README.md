@@ -9,9 +9,9 @@ Usage:
 ==============
 git clone https://github.com/secworld/Breach-Miner.git && cd Breach-Miner 
 
-chmod +x breachminer.py requirements.sh
-
 ./requirements.sh
+
+chmod +x breachminer.py
 
 python breachminer.py
 
