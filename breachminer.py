@@ -11,6 +11,7 @@ from cache_search import cache_search
 from create_html import create_html
 from create_html import invokeBrowser
 import xml.etree.ElementTree as ET
+import shlex
 
 
 print "\033[31m \n"            
@@ -35,7 +36,10 @@ BaseUrl = 'https://haveibeenpwned.com/api/v2/pasteaccount/'
 
 def invokeHarvester(domain):
     print '\033[93m [*] Running with configuration : -l 500 -b google '
-    os.system('theharvester -d '+domain+' -l 500 -b google -f harv_output.xml')
+    query = ('theharvester -d '+domain+' -l 500 -b google -f harv_output.xml')
+    query1 = shlex.split(query, comments=False, posix=True)
+    subprocess.call(query1) #
+    #os.system('theharvester -d '+domain+' -l 500 -b google -f harv_output.xml')
     tree = ET.parse('harv_output.xml')
     with open('harv_emails.txt', "w") as f:
         for elem in tree.iter(tag='email'):
