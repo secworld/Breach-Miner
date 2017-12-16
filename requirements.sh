@@ -1,7 +1,7 @@
 #! /bin/bash
 
 mkdir -p Files
-req=([1]=wget [2]=theharvester [3]=python2.7 [4]=npm)
+req=([1]=wget [2]=theharvester [3]=python2.7 [4]=nodejs [5]=phantomjs)
 
 for i in "${req[@]}"
 do
@@ -14,12 +14,12 @@ else
     if [[ "$OSTYPE" == "darwin"* ]]; then
         brew install $i
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        sudo apt-get install --force-yes --yes $i
+        sudo apt-get install -y $i
     fi
 fi
 
 done
 
-sudo npm install phantomjs
+#sudo npm install phantomjs
 
 echo "Ready To Go !!!"

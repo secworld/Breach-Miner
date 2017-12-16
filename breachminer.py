@@ -33,6 +33,7 @@ $$$$$$$  |$$ |      \$$$$$$$\ \$$$$$$$ |\$$$$$$$\ $$ |  $$ |$$ | \_/ $$ |$$ |$$ 
 
 headers = {'User-Agent' : 'Digging-for-Pentesting', 'Accept' : 'application/vnd.haveibeenpwned.v2+json'}
 BaseUrl = 'https://haveibeenpwned.com/api/v2/pasteaccount/'
+BreachBaseUrl = 'https://haveibeenpwned.com/api/v2/breachedaccount/'
 
 def invokeHarvester(domain):
     print '\033[93m [*] Running with configuration : -l 500 -b google '
@@ -47,7 +48,7 @@ def invokeHarvester(domain):
             f.write(elem.text+'\n')
     f.close()
 
-
+   
 
 def invokeBM(EmailList):
     os.system('clear')
@@ -64,10 +65,29 @@ def invokeBM(EmailList):
             res.write(banner_html)
             with open(EmailList) as f:
                 for email in f:
+                    time.sleep(0.5)
                     Url1 = urllib.quote(email, safe='')
                     Url = BaseUrl+Url1
                     Url = Url[:-3]
+                    Burl = BreachBaseUrl+Url1
+                    Burl = Burl[:-3]
                     headers = None
+                    rs = requests.get(Burl, headers = headers)
+                    try:
+                        jd = rs.json()
+                    except ValueError:
+                        print "\n \033[31m [*] No data found for " + email
+                    if (rs.status_code == 200):
+                        print ('\n')
+                        print ("\033[94m *************************************************************************************")
+                        print '  \033[93m  [*] This email ID has been found breached : \033[93m'+email
+                        print ("\033[94m *************************************************************************************")
+                        print ('\n')
+                        for itm in jd:
+                            src = itm.get('Domain')
+                            bdate = itm.get('BreachDate')
+                            titl = itm.get('Title')
+                        print '  \033[93m  [*] The email has been found in breach - '+titl+' on '+bdate+' during '+src+' breach \033[93m'
                     r = requests.get(Url, headers = headers)
                     try:
                         JsonData =  (r.json())
@@ -231,7 +251,7 @@ def invokeBM(EmailList):
             f.close()
         res.close()
     except:
-        print 'Something went wrong.. May be I donot have that much skills :('
+        print 'Something went wrong.. May be I do not have that much skills :('
                             
 if __name__ == "__main__":
     os.system('clear')
