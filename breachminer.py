@@ -65,14 +65,19 @@ def invokeBM(EmailList):
             res.write(banner_html)
             with open(EmailList) as f:
                 for email in f:
+                    print email
                     time.sleep(2)
                     Url1 = urllib.quote(email, safe='')
                     Url = BaseUrl+Url1
-                    Url = Url[:-3]
+                    Url =  Url.strip('%0A')
+                    Url = Url.strip('%0D')
                     Burl = BreachBaseUrl+Url1
-                    Burl = Burl[:-3]
+                    Burl =  Burl.strip('%0A')
+                    Burl = Burl.strip('%0D')
+                    print Burl
                     headers = None
                     rs = requests.get(Burl, headers = headers)
+                    print rs.status_code
                     try:
                         jd = rs.json()
                     except ValueError:
@@ -93,7 +98,6 @@ def invokeBM(EmailList):
                         JsonData =  (r.json())
                     except ValueError:
                         print "\n \033[31m [*] No data found for " + email
-                        
                     if (r.status_code == 200):
                         print ('\n')
                         print ("\033[94m *************************************************************************************")
