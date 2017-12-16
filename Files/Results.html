@@ -1,12 +1,4 @@
-import os
-import webbrowser
 
-
-def create_html():
-
-    #p = subprocess.Popen('cat '+CurrPath+' | grep -B 1 -A 1 '+email, stdout=subprocess.PIPE, shell=True)
-    #(output, err) = p.communicate()
-    html_top="""
     <!DOCTYPE html>
     <html>
     <head>
@@ -147,15 +139,4 @@ window.onload = function (evt) {
     <div style="color:#ff0000; text-align:left;"><pre>Twitter  : https://twitter.com/dH4wk</pre></div>
         
     <br><div class="b"><i><b>Anlalysis Completed !!! See below for the details  </i></b> :)</div><br>
-    """
-    return html_top
-    
-def invokeBrowser():
-    path = os.getcwd()+'/Files/Results.html'
-    webbrowser.open(path, 2)      
-
-
-
-
-
     

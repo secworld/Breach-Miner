@@ -65,7 +65,7 @@ def invokeBM(EmailList):
             res.write(banner_html)
             with open(EmailList) as f:
                 for email in f:
-                    time.sleep(0.5)
+                    time.sleep(2)
                     Url1 = urllib.quote(email, safe='')
                     Url = BaseUrl+Url1
                     Url = Url[:-3]
